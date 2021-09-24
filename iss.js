@@ -9,23 +9,22 @@ const request = require("request");
  *   - The IP address as a string (null if error). Example: "162.245.144.188"
  */
 
- const nextISSTimesForMyLocation = function(callback) {
+const nextISSTimesForMyLocation = function (callback) {
   fetchMyIP((error, ip) => {
     if (error) {
       return callback(error, null);
     }
+    
 
-    fetchCoordsByIp(ip, (error, loc) => {
+    fetchCoordsByIp(ip, (error, coords) => {
       if (error) {
         return callback(error, null);
       }
-
-      fetchISSFlyOverTimes(loc, (error, nextPasses) => {
+      
+      fetchISSFlyOverTimes(ip, coords, (error) => {
         if (error) {
           return callback(error, null);
         }
-
-        callback(null, nextPasses);
       });
     });
   });
@@ -92,4 +91,6 @@ const fetchISSFlyOverTimes = function (coords, callback) {
   });
 };
 
-module.exports = { nextISSTimesForMyLocation };
+module.exports = {
+  nextISSTimesForMyLocation,
+};
